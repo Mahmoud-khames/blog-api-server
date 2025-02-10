@@ -9,7 +9,7 @@ import connectDB from "./lib/connectDb.js";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 const app = express();
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 3001;
 app.use(cors(process.env.CLERK_FRONTEND_API));
 app.use("/webhooks", webHookRouter);
 app.use(express.json());
@@ -20,7 +20,7 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(clerkMiddleware());
-app.use("/users", userRouter);
+app.use("/users", userRouter); 
 app.use("/posts", postsRouter);
 app.use("/comments", commentRouter);
 
