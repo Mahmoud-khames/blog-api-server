@@ -35,12 +35,8 @@ app.use((error, req, res, next) => {
     stack: error.stack,
   });
 });
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Hello from the backend server",
-  });
-});
-app.listen(port, () => {
+
+app.listen(port || 3001, () => {
   connectDb();
   console.log("Server is running ");
 });
