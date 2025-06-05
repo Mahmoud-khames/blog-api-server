@@ -11,7 +11,13 @@ import cors from "cors";
 
 const app = express();
 const port = process.env.PORT || 3001;
-app.use(cors(process.env.CLERK_FRONTEND_API));
+app.use(
+  cors({
+    origin: process.env.CLERK_FRONTEND_API,
+
+    credentials: true,
+  })
+);
 app.use("/webhooks", webHookRouter);
 app.use(express.json());
 app.use(function (req, res, next) {
@@ -41,4 +47,7 @@ app.listen(port || 3001, () => {
   console.log("Server is running ");
 });
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 export default app;
