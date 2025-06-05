@@ -11,23 +11,30 @@ import cors from "cors";
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+// Debug: Log the environment variable
+console.log('CLERK_FRONTEND_API:', JSON.stringify(process.env.CLERK_FRONTEND_API));
+
 app.use(
   cors({
-    origin: process.env.CLERK_FRONTEND_API,
-
+    origin: process.env.CLERK_FRONTEND_API || true,
     credentials: true,
   })
 );
+
 app.use("/webhooks", webHookRouter);
 app.use(express.json());
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+
+// ❌ Remove this - it conflicts with cors() middleware above
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
+
 app.use(clerkMiddleware());
 app.use("/users", userRouter);
 app.use("/posts", postsRouter);
@@ -44,10 +51,11 @@ app.use((error, req, res, next) => {
 
 app.listen(port || 3001, () => {
   connectDb();
-  console.log("Server is running ");
+  console.log("Server is running");
 });
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
 export default app;
